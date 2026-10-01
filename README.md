@@ -59,7 +59,7 @@ sudo pacman -S --needed base-devel pkgconf openssl
 **Option 1: Automated Installation (Recommended)**
 ```bash
 # 1. Clone the repository
-git clone https://github.com/albatany/KryptoOS.git
+git clone https://github.com/AceBreaker-cell/KryptoOS.git
 cd KryptoOS
 
 # 2. Make installer executable and run it
@@ -78,7 +78,7 @@ sudo ./scripts/install.sh
 **Option 2: Manual Installation**
 ```bash
 # 1. Clone and build
-git clone https://github.com/albatany/KryptoOS.git
+git clone https://github.com/AceBreaker-cell/KryptoOS.git
 cd KryptoOS
 cargo build --release  # Produces target/release/kryptonos
 
