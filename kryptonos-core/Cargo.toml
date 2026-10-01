@@ -1,0 +1,16 @@
+[package]
+name = "kryptonos-core"
+version = "0.1.0"
+edition = "2021"
+description = "KryptonOS Core Security Engine"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/albatany/KryptoOS"
+
+[dependencies]
+tokio = { version = "1.0", features = ["macros", "rt"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+sled = "0.34"
+rdev = "0.8"
+slint = { version = "1.0", features = ["fluent"] }
+chrono = { version = "0.4", features = ["serde"] }

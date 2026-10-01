@@ -1,0 +1,243 @@
+import { StandardButton, VerticalBox, HorizontalBox, ScrollView } from "std-widgets.slint";
+
+export component MainWindow inherits Window {
+    title: "KryptonOS - Zero-Trust Host Access Controller";
+    width: 800px;
+    height: 600px;
+    minimum-width: 600px;
+    minimum-height: 400px;
+    background: #1e1e1e;
+
+    // Properties for UI state
+    property <bool> default-deny-enabled: true;
+    property <int> alert-count: 0;
+    property <string> system-status: "Protected";
+
+    // Logo placeholder - in a real implementation, we'd use the embedded bitmap
+    rectangle {
+        width: 64px;
+        height: 64px;
+        background: #4682b4; // Steel blue color matching our logo
+        // In actual implementation, we would display the embedded logo bitmap here
+    }
+
+    VerticalBox {
+        alignment: start;
+        padding: 20px;
+        spacing: 20px;
+
+        // Header with logo and title
+        HorizontalBox {
+            alignment: start;
+            spacing: 16px;
+
+            // Logo would go here
+            rectangle {
+                width: 48px;
+                height: 48px;
+                background: #4682b4;
+            }
+
+            Text {
+                font-size: 24px;
+                font-weight: bold;
+                color: #ffffff;
+                text: "KryptonOS";
+            }
+        }
+
+        // System status section
+        HorizontalBox {
+            alignment: start;
+            spacing: 24px;
+
+            VerticalBox {
+                alignment: start;
+                Text {
+                    color: #b0b0b0;
+                    text: "Security Mode";
+                }
+                Text {
+                    font-size: 18px;
+                    color: if default-deny-enabled { #4caf50 } else { #f44336 };
+                    text: if default-deny-enabled { "DEFAULT DENY (ACTIVE)" } else { "BYPASS MODE" };
+                }
+            }
+
+            VerticalBox {
+                alignment: start;
+                Text {
+                    color: #b0b0b0;
+                    text: "System Status";
+                }
+                Text {
+                    font-size: 18px;
+                    color: #4caf50;
+                    text: system-status;
+                }
+            }
+
+            VerticalBox {
+                alignment: start;
+                Text {
+                    color: #b0b0b0;
+                    text: "Active Alerts";
+                }
+                Text {
+                    font-size: 18px;
+                    color: #ff9800;
+                    text: alert-count;
+                }
+            }
+        }
+
+        // Toggle switch for default-deny mode
+        HorizontalBox {
+            alignment: start;
+            spacing: 16px;
+
+            Text {
+                color: #e0e0e0;
+                font-size: 16px;
+                text: "Enforce Default-Deny Policy:";
+            }
+
+            Switch {
+                checked: default-deny-enabled;
+                toggled => {
+                    root.default-deny-enabled = checked;
+                    // In real implementation, this would send command to engine
+                }
+            }
+
+            Text {
+                color: if default-deny-enabled { #4caf50 } else { #f44336 };
+                text: if default-deny-enabled { "Enabled" } else { "Disabled" };
+            }
+        }
+
+        // Security events grid
+        GroupBox {
+            title: "Security Events";
+            VerticalBox {
+                padding: 12px;
+                spacing: 8px;
+
+                ScrollView {
+                    max-height: 250px;
+                    VerticalBox {
+                        spacing: 4px;
+                        // Events would be dynamically added here
+                        // For demo, showing placeholder events
+                        EventItem {
+                            process-name: "curl.exe";
+                            action: "Network Connection";
+                            target: "93.184.216.34:80";
+                            time: "14:23:12";
+                            status: "blocked";
+                        }
+                        EventItem {
+                            process-name: "powershell.exe";
+                            action: "Process Execution";
+                            target: "C:\\Windows\\System32\\wbem\\wmic.exe";
+                            time: "14:22:05";
+                            status: "blocked";
+                        }
+                        EventItem {
+                            process-name: "chrome.exe";
+                            action: "USB Device Mount";
+                            target: "USB Mass Storage Device";
+                            time: "14:21:33";
+                            status: "allowed";
+                        }
+                    }
+                }
+            }
+        }
+
+        // Control buttons at bottom
+        HorizontalBox {
+            alignment: end;
+            spacing: 12px;
+
+            StandardButton {
+                text: "Refresh";
+                clicked => {
+                    // In real implementation, this would refresh the event list
+                }
+            }
+
+            StandardButton {
+                text: "Clear Logs";
+                clicked => {
+                    // In real implementation, this would clear the event log
+                }
+            }
+        }
+    }
+}
+
+// Custom component for displaying security events
+component EventItem inherits Rectangle {
+    height: 40px;
+    background: #2d2d2d;
+    corner-radius: 4px;
+
+    // Properties for the event data
+    property <string> process-name;
+    property <string> action;
+    property <string> target;
+    property <string> time;
+    property <string> status; // allowed, blocked, pending
+
+    HorizontalBox {
+        padding: 8px;
+        spacing: 12px;
+
+        // Status indicator
+        Rectangle {
+            width: 12px;
+            height: 12px;
+            background: if status == "blocked" { #f44336 }
+                       else if status == "allowed" { #4caf50 }
+                       else { #ff9800 };
+            corner-radius: 6px;
+        }
+
+        VerticalBox {
+            alignment: start;
+            spacing: 2px;
+
+            Text {
+                color: #ffffff;
+                font-size: 13px;
+                text: process-name;
+            }
+
+            Text {
+                color: #b0b0b0;
+                font-size: 11px;
+                text: action;
+            }
+        }
+
+        HorizontalBox {
+            alignment: end;
+            spacing: 8px;
+
+            Text {
+                color: #808080;
+                font-size: 11px;
+                text: time;
+            }
+
+            Text {
+                color: if status == "blocked" { #f44336 }
+                       else if status == "allowed" { #4caf50 }
+                       else { #ff9800 };
+                font-size: 11px;
+                text: target;
+            }
+        }
+    }
+}

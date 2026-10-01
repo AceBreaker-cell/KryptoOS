@@ -1,0 +1,29 @@
+[package]
+name = "kryptonos-agent"
+version = "0.1.0"
+edition = "2021"
+description = "KryptonOS System Agent - Zero-Trust Host Access Controller"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/albatany/KryptoOS"
+
+[dependencies]
+tokio = { version = "1.0", features = ["full"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+sled = "0.34"
+futures-util = "0.3"
+chrono = { version = "0.4", features = ["serde"] }
+tokio-tun = { version = "0.3", optional = true }
+pnet = { version = "0.27", optional = true }
+
+[target.'cfg(target_os = "linux")'.dependencies]
+tokio-tun = { version = "0.3" }
+pnet = { version = "0.27" }
+
+[target.'cfg(target_os = "windows")'.dependencies]
+# Windows-specific dependencies would go here
+# For now, we'll use placeholders that can be implemented later
+
+[dev-dependencies]
+tokio-test = "0.4"
+assert_matches = "1.5"

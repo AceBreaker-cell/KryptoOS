@@ -1,0 +1,14 @@
+[workspace]
+members = [
+    "kryptonos-core",
+    "kryptonos-ui"
+]
+
+resolver = "2"
+
+[workspace.profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
